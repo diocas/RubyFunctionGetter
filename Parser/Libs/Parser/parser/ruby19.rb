@@ -4581,7 +4581,7 @@ Racc_debug_parser = false
   end
 
   def _reduce_303(val, _values, result)
-                          *when_bodies, (else_t, else_body) = *val[3]
+                         # *when_bodies, (else_t, else_body) = *val[3] ###????
 
                       result = @builder.case(val[0], val[1],
                                              when_bodies, else_t, else_body,
@@ -4591,7 +4591,7 @@ Racc_debug_parser = false
   end
 
   def _reduce_304(val, _values, result)
-                          *when_bodies, (else_t, else_body) = *val[2]
+                          #*when_bodies, (else_t, else_body) = *val[2] ###????
 
                       result = @builder.case(val[0], nil,
                                              when_bodies, else_t, else_body,

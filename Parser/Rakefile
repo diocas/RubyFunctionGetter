@@ -7,7 +7,7 @@ task :build do
   Opal::Processor.source_map_enabled = false
   Opal.append_path File.dirname(__FILE__) + '/Libs/Parser'
   Opal.append_path File.dirname(__FILE__) + '/Libs/ast'
-  #Opal.append_path '/Users/diogo/.rbenv/versions/2.0.0-p451/lib/ruby/gems/2.0.0/gems/ruby_parser-3.6.2/lib'
+  #Opal.append_path File.dirname(__FILE__) + '/Libs/Ruby_parser'
   env = Opal::Environment.new
   env.append_path "app"
 

@@ -46,4 +46,5 @@ class CodeFile
     return @ast
   end
   
+  private :getFunctionAux
 end

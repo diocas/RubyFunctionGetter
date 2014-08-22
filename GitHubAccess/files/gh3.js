@@ -522,6 +522,37 @@
 			});
 
 		},
+		fetchContentVersion : function (version, callback) {
+			var that = this;
+			
+			Gh3.Helper.callHttpApi({
+				service : "repos/"+that.user.login+"/"+that.repositoryName+"/commits/"+this.commits[version].sha,
+				success : function(res) {
+					_.each(res.data.files, function (file) {
+						if(file.filename == that.path){
+							
+							Gh3.Helper.callHttpApi({
+								service : "repos/"+that.user.login+"/"+that.repositoryName+"/git/blobs/"+file.sha,
+								success : function(raw) {
+									that.content = raw.data.content;
+									that.rawContent = Base64.decode(raw.data.content);
+				
+									if (callback) callback(null, that);
+								},
+								error : function (raw) {
+									if (callback) callback(new Error(raw.responseJSON.message),raw);
+								}
+							});
+							
+						}
+					});
+				},
+				error : function (res) {
+					if (callback) callback(new Error(res.responseJSON.message),res);
+				}
+			});
+
+		},
 		fetchCommits : function (callback) {//http://developer.github.com/v3/repos/commits/
 			var that = this;
 			that.commits = [];
@@ -543,6 +574,9 @@
 		},
 		getRawContent : function() { return this.rawContent; },
 		getCommits : function () { return this.commits; },
+		getCommit : function (i) {
+			return this.commits[i];
+		},
 		getLastCommit : function () {
 			return this.commits[0];
 		},
