@@ -32,47 +32,69 @@ function getFile(file, config, version, callback)
 				if(err) {
 					throw "Branch not found";
 				}
-				
-				var file_info = branch.getFileByName(file);
-				
-				if(!version)
-				{
-					file_info.fetchContent(function (err, res) {
-						if(err)
-						{
-							throw "File not found";
-						}
-						callback(file_info.getRawContent());
-					});
-				}
-				else
-				{
-					file_info.fetchCommits(function (err, res) {
-			            if(err) {
-			            	throw "Error retrieving commits";
-			            }
-						
-						file_info.fetchContentVersion(version, function (err, res) {
-							if(err)
-							{
-								throw "File not found";
-							}
-							callback(file_info.getRawContent());
-						});
-			         });
-				}
+			
+				_changeDirAndOpen(branch, file.split('/'), version, callback);
 			});
     	});
 	});
 }
 
+function _changeDirAndOpen(previous, path, version, callback)
+{
+	if(path.length == 1)
+	{
+		_getFile(previous, path[0], version, callback);
+	}
+	else
+	{
+		var dir = previous.getDirByName(path[0]);
+		
+		dir.fetchContents(function (err, res2)
+		{
+			_changeDirAndOpen(dir, path.splice(1,path.length), version, callback);
+		});
+	}
+}
+
+function _getFile(directory, file, version, callback)
+{
+	var file_info = directory.getFileByName(file);
+				
+	if(!version)
+	{
+		file_info.fetchContent(function (err, res) {
+			if(err)
+			{
+				throw "File not found";
+			}
+			callback(file_info.getRawContent());
+		});
+	}
+	else
+	{
+		file_info.fetchCommits(function (err, res) {
+            if(err) {
+            	throw "Error retrieving commits";
+            }
+			
+			file_info.fetchContentVersion(version, function (err, res) {
+				if(err)
+				{
+					throw "File not found";
+				}
+				callback(file_info.getRawContent());
+			});
+         });
+	}
+}
+
 
 var configs = {
-	user : 'k33g',
-	repository : 'k33g.github.com',
+	user : 'diocas',
+	repository : 'RubyFunctionGetter',
 	branch : 'master'
 };
 
-getFile('index.html', configs, null, function (content){
+getFile('GitHubAccess/application.js', configs, 1, function (content){
 	$("textarea").text(content);
 });
