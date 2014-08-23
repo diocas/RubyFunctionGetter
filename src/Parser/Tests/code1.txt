@@ -2,7 +2,7 @@ def ole1
   puts 'ole1'
 end
 
-def ole2
+def ole2 (a)
   puts 'ole2'
 end
 

@@ -526,7 +526,7 @@
 			var that = this;
 			
 			Gh3.Helper.callHttpApi({
-				service : "repos/"+that.user.login+"/"+that.repositoryName+"/commits/"+this.commits[version].sha,
+				service : "repos/"+that.user.login+"/"+that.repositoryName+"/commits/"+this.commits[this.commits.length-version-1].sha,
 				success : function(res) {
 					_.each(res.data.files, function (file) {
 						if(file.filename == that.path){
