@@ -5,7 +5,7 @@ require 'parser/current'
 #require 'ruby_parser'
 #puts RubyParser.new.parse("while false : 42 end")
 
-class CodeFile
+class CodeParser
   
   def initialize(code)
     @ast = Parser::CurrentRuby.parse(code)
