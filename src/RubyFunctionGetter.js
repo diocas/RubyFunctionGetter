@@ -1,3 +1,5 @@
+//TODO: tratamento de erros quando usa versoes...
+
 function RubyFunctionGetter(config)
 {
 	this.config = config;
@@ -21,7 +23,8 @@ function RubyFunctionGetter(config)
 				$(this).text('Loading...');
 				
 				path.file = text.match("^([A-Za-z0-9_.\/])+")[0];
-				path.version = text.match("\:[0-9]+");
+				//path.version = text.match("\:[0-9]+");
+				path.version = text.match("\:[a-fA-F0-9]+");
 				if(path.version) path.version = path.version[0].substring(1, path.version[0].length);
 				path.method = text.match("\#([A-Za-z_])+");
 				path.method = path.method[0].substring(1, path.method[0].length);
@@ -163,7 +166,7 @@ function RubyFunctionGetter(config)
 				}).done(function () {
 					getting_code.resolve();
 					loaded.resolve();
-				}).failt(function () {
+				}).fail(function () {
 					getting_code.reject();
 					loaded.reject();
 				});
