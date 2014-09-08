@@ -4760,10 +4760,10 @@ Racc_debug_parser = false
     result
   end
 
-  def _reduce_302(val, _values, result)
+  def _reduce_302(val, _values, result)                                 ####???
                           lambda_call = @builder.call_lambda(val[0])
 
-                      args, (begin_t, body, end_t) = val[1]
+                      #args, (begin_t, body, end_t) = val[1]
                       result      = @builder.block(lambda_call,
                                       begin_t, args, body, end_t)
                     
@@ -4826,8 +4826,8 @@ Racc_debug_parser = false
     result
   end
 
-  def _reduce_311(val, _values, result)
-                          *when_bodies, (else_t, else_body) = *val[3]
+  def _reduce_311(val, _values, result)                                 ####???
+                          #*when_bodies, (else_t, else_body) = *val[3]
 
                       result = @builder.case(val[0], val[1],
                                              when_bodies, else_t, else_body,
@@ -4836,8 +4836,8 @@ Racc_debug_parser = false
     result
   end
 
-  def _reduce_312(val, _values, result)
-                          *when_bodies, (else_t, else_body) = *val[2]
+  def _reduce_312(val, _values, result)                                 ####???)
+                          #*when_bodies, (else_t, else_body) = *val[2]
 
                       result = @builder.case(val[0], nil,
                                              when_bodies, else_t, else_body,

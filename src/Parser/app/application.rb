@@ -2,9 +2,6 @@ require 'opal'
 require 'ast'
 require 'parser/current'
 
-#require 'ruby_parser'
-#puts RubyParser.new.parse("while false : 42 end")
-
 class CodeParser
   
   def initialize(code)

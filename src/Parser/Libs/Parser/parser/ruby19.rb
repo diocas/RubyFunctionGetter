@@ -4514,10 +4514,10 @@ Racc_debug_parser = false
     result
   end
 
-  def _reduce_294(val, _values, result)
+  def _reduce_294(val, _values, result)                                 ####???
                           lambda_call = @builder.call_lambda(val[0])
 
-                      args, (begin_t, body, end_t) = val[1]
+                      ##args, (begin_t, body, end_t) = val[1]
                       result      = @builder.block(lambda_call,
                                       begin_t, args, body, end_t)
                     
@@ -4583,9 +4583,10 @@ Racc_debug_parser = false
   def _reduce_303(val, _values, result)
                          # *when_bodies, (else_t, else_body) = *val[3] ###????
 
-                      result = @builder.case(val[0], val[1],
-                                             when_bodies, else_t, else_body,
-                                             val[4])
+                      #result = @builder.case(val[0], val[1],
+                      #                       when_bodies, else_t, else_body,
+                      #                       val[4])
+                      result = new_while val[5], val[2], true
                     
     result
   end
@@ -4593,9 +4594,10 @@ Racc_debug_parser = false
   def _reduce_304(val, _values, result)
                           #*when_bodies, (else_t, else_body) = *val[2] ###????
 
-                      result = @builder.case(val[0], nil,
-                                             when_bodies, else_t, else_body,
-                                             val[3])
+                      #result = @builder.case(val[0], nil,
+                      #                       when_bodies, else_t, else_body,
+                      #                       val[3])
+                      lexer.cond.push true
                     
     result
   end

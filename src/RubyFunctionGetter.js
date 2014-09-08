@@ -21,12 +21,13 @@ function RubyFunctionGetter(config)
 				var path = {}, flags = {};
 				
 				$(this).text('Loading...');
+				$(this).addClass('gettified').removeClass('gettify');
 				
 				path.file = text.match("^([A-Za-z0-9_.\/])+")[0];
 				//path.version = text.match("\:[0-9]+");
 				path.version = text.match("\:[a-fA-F0-9]+");
 				if(path.version) path.version = path.version[0].substring(1, path.version[0].length);
-				path.method = text.match("\#([A-Za-z_])+");
+				path.method = text.match("\#([A-Za-z0-9_.])+");
 				path.method = path.method[0].substring(1, path.method[0].length);
 				flags.lines  = text.match("-l [0-9\-\, ]+");
 				if(flags.lines) flags.lines = flags.lines[0].substring(3, flags.lines[0].length);
