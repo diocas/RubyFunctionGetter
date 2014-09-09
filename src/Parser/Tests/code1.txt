@@ -10,4 +10,7 @@ class Teste
   def dentroClasse
     puts 'dentro!'
   end
+  def dentroClasse2
+    puts 'dentro!'
+  end
 end

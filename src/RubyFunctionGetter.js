@@ -1,4 +1,3 @@
-//TODO: tratamento de erros quando usa versoes...
 
 function RubyFunctionGetter(config)
 {
@@ -23,7 +22,7 @@ function RubyFunctionGetter(config)
 				$(this).text('Loading...');
 				$(this).addClass('gettified').removeClass('gettify');
 				
-				path.file = text.match("^([A-Za-z0-9_.\/])+")[0];
+				path.file = text.match("^([A-Za-z0-9\-_.\/])+")[0];
 				//path.version = text.match("\:[0-9]+");
 				path.version = text.match("\:[a-fA-F0-9]+");
 				if(path.version) path.version = path.version[0].substring(1, path.version[0].length);
@@ -75,13 +74,13 @@ function RubyFunctionGetter(config)
 			this.files_status[converted_path] = getting_file;
 			github.getFile(path.file, path.version, function (content, err)
 			{
-				this_class.files[converted_path] = new CodeParser(content);
-				file_code.code = this_class.files[converted_path];
-				
 				if (err == null || !err){
+					this_class.files[converted_path] = new CodeParser(content);
+					file_code.code = this_class.files[converted_path];
 					getting_file.resolve();
 					loaded.resolve();
 				} else {
+					file_code.code = content;
 					getting_file.reject();
 					loaded.reject();
 				} 
@@ -118,13 +117,22 @@ function RubyFunctionGetter(config)
 				
 				var file_code = {};
 				$.when(this._getFile(path, file_code)).always(function () {
-					var code =  file_code.code.getFunction(path.method);
-					this_class.codes_temp[converted_path] = code;
-					method_code.code = code;
+					
 				}).done(function () {
+					try {
+						var code =  file_code.code.getFunction(path.method);
+						this_class.codes_temp[converted_path] = code;
+						method_code.code = code;
+					}catch(e){
+						method_code.code = e;
+						getting_code.reject();
+						loaded.reject();
+					}
+					
 					getting_code.resolve();
 					loaded.resolve();
 				}).fail(function () {
+					method_code.code = file_code.code;
 					getting_code.reject();
 					loaded.reject();
 				});
@@ -161,13 +169,22 @@ function RubyFunctionGetter(config)
 				
 				var file_code = {};
 				$.when(this._getFile(path, file_code)).always(function () {
-					var code =  file_code.code.getFunction(path.method);
-					$.jStorage.set(converted_path, code);
-					method_code.code = code;
+					
 				}).done(function () {
+					try {
+						var code =  file_code.code.getFunction(path.method);
+						$.jStorage.set(converted_path, code);
+						method_code.code = code;
+					}catch (e) {
+						method_code.code = e;
+						getting_code.reject();
+						loaded.reject();
+					}
+					
 					getting_code.resolve();
 					loaded.resolve();
 				}).fail(function () {
+					method_code.code = file_code.code;
 					getting_code.reject();
 					loaded.reject();
 				});

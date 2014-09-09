@@ -11,7 +11,7 @@ function CodeParser(codeGiven)
 		type: "POST",
 		url: CodeParser.SERVICE_URL,
 		data: {
-			code : this.code
+			code : code
 		},
 		async : false
 	}).done(function( data ) {
@@ -22,7 +22,7 @@ function CodeParser(codeGiven)
 	this.getFunction = function (methodToReturn)
 	{
 		if (serverId == "") 
-			return "Code parsing error!";
+			throw "Code parsing error!";
 		
 		$.ajax({
 			type: "GET",
@@ -39,7 +39,7 @@ function CodeParser(codeGiven)
 		  });
 		
 		if(lastCodeToReturn == "")
-			return "Method not found!";
+			throw "Method not found!";
 			
 		return lastCodeToReturn;
 	};
