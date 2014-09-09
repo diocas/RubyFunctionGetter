@@ -1,12 +1,37 @@
 require 'sinatra'
 require_relative 'application'
-require 'json'
 
-# TODO maintain this data only for a session
 
-#use Rack::Session::Pool, :expire_after => 2592000
+class Session
+  @@id = 0;
+  
+  def initialize (code)
+    @id = @@id
+    @@id += 1
+    @time = Time.new
+    @code = code
+  end
+  
+  def valid?
+    (Time.new - @time) < 120  # after 3 minutes clean the old session
+  end
+  
+  def update
+    @time = Time.new
+  end
+  
+  def id
+    @id
+  end
+  
+  def code
+    @code
+  end
+end
 
-codeList = Array.new
+
+
+sessionList = Array.new
 
 before do
   headers['Access-Control-Allow-Methods'] = 'POST'
@@ -18,9 +43,11 @@ end
 
 post '/' do
   begin
+    Thread.new{cleanOld(sessionList)}
     code = CodeParser.new(params[:code])
-    codeList.push(code)
-    codeList.index(code).to_s
+    session = Session.new(code)
+    sessionList.push(session)
+    return session.id.to_s
   rescue
     
   end
@@ -30,8 +57,22 @@ get '/code/' do
   begin
     idCode = params[:idCode]
     method = params[:method]
-    codeList[idCode.to_i].getFunction(method)
+    
+    sessionList.each do |session|
+      if(session.id == idCode.to_i)
+        session.update
+        return session.code.getFunction(method)
+      end
+    end
   rescue
     
+  end
+end
+
+def cleanOld(sessionList)
+  sessionList.each do |session|
+    unless (session.valid?)
+      sessionList.delete(session)
+    end
   end
 end
