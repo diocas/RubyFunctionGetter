@@ -1,7 +1,21 @@
+
+/**
+ * Class to highlight the syntax of the code.
+ * 
+ * @param config Object with configurations (namely the language of the code)
+ */
+
 function Beuatifier(config)
 {
 	this.config = config;
 	
+	/**
+	 * Function to insert the code with color highlighting.
+	 * 
+	 * @param code Code to color.
+	 * @param place Html element where to put the result.
+	 * @param flags Flags to show lines and/or highlits a specific line(s).
+	 */
 	this.insertCode = function(code, place, flags)
 	{
 		var random = Math.floor(Math.random()*101);
@@ -20,6 +34,9 @@ function Beuatifier(config)
 		Prism.highlightElement($('#beautifier-'+random)[0]);
 	};
 	
+	/**
+	 * Insert an error message.
+	 */
 	this.insertError = function(text, place)
 	{
 		$(place).html('<span class="error">'+text);

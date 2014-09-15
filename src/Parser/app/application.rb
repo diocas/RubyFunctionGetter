@@ -2,16 +2,23 @@ require 'opal'
 require 'ast'
 require 'parser/current'
 
+## Class CodeParser
+## Converts the passed code to an AST and gives 
+###   functions to obtain the methods source code.
+
 class CodeParser
   
+  ## Use the Opal parser to convert the code to an AST
   def initialize(code)
     @ast = Parser::CurrentRuby.parse(code)
   end
   
+  ## Get the passed method source code
   def getFunction(name)
     getFunctionAux(@ast, name)
   end
   
+  ## Check all nodes looking for the path's first element
   def getFunctionAux(tree, name)
   
     names = name.split(".", 2)
@@ -42,6 +49,8 @@ class CodeParser
     return
   end
   
+  ## Check if the node is a class or module with the name given.
+  ## If yes, continue to his children.
   def checkNode (node, names)
     unless node.nil?
       if(["module", "class"].include? node.type.to_s and node.children[0].loc.name.source.eql? names[0])
@@ -58,6 +67,7 @@ class CodeParser
     return
   end
   
+  ## Check the last node elements looking for the method
   def getFunctionCode(tree, name)
 
     if tree.kind_of?(Array)
@@ -76,6 +86,7 @@ class CodeParser
     return
   end
   
+  ## Return the method code
   def getFunctionCodeNode(node, name)
     unless node.nil?
       if(node.type.to_s.eql? "def" and node.children[0].to_s.eql? name)
@@ -84,6 +95,7 @@ class CodeParser
     end
   end
   
+  ## Get the AST from the code passed on construction
   def getAST
     return @ast
   end

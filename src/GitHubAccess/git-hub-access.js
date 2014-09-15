@@ -1,27 +1,34 @@
 
 /**
- * @param file Path to file
- * @param config Object with the repository configurations
- * @param version Commit version of the file to get. Optional.
- * @param callback Function to be called when complete (parameter with content).
+ * Class responible for accessing the github repository and getting its files.
+ * 
+ * @param config Object with the repository configurations.
  */
 
 function GitHubAccess (config)
 {
 	this.config = config;
 	
+	
+	/**
+	 * Get a file from the current repository.
+	 * 
+	 * @param file Path to file.
+	 * @param version Commit SHA of where to get the file. Optional.
+	 * @param callback Function to be called when complete (parameter with content).
+	 */
 	this.getFile = function(file, version, callback)
 	{
 		var user = new Gh3.User(this.config.user);
 		var repository = new Gh3.Repository(this.config.repository, user);
 		
-		repository.fetch(function (err, res)
+		repository.fetch(function (err, res) //Try to get repository
 		{
 			if (err)
 			{
 	    		callback("Repository not found", true);
 			}
-			repository.fetchBranches(function (err, res)
+			repository.fetchBranches(function (err, res) //Try to get branch
 			{
 				if(err)
 				{
@@ -31,13 +38,13 @@ function GitHubAccess (config)
 	    		var branch = repository.getBranchByName(config.branch == null ? 'master' : config.branch);
 		    	try
 		    	{
-		    		branch.fetchContents(function (err, res)
+		    		branch.fetchContents(function (err, res) //Try to get contents from root
 		    		{
 		    			if (err)
 		    			{
 		    				callback("Error fetching contents", true);
 		    			}
-						_changeDirAndOpen(branch, file.split('/'), version, callback);
+						_changeDirAndOpen(branch, file.split('/'), version, callback); //Try to open directories or files
 					});
 				} catch (e) {
 					callback("Branch not found", true);
@@ -46,7 +53,16 @@ function GitHubAccess (config)
 		});
 	};
 	
-	function _changeDirAndOpen(previous, path, version, callback)
+	/**
+	 * Deconstruct the file path and change iteratively the folder.
+	 * If in the last folder, try opening the file.
+	 * 
+	 * @param {Object} previous Previous folder opened.
+	 * @param {Object} path Path to desconstruct.
+	 * @param {Object} version SHA of the version to get.
+	 * @param {Object} callbackF unction to be called when complete (parameter with content).
+	 */
+	function _changeDirAndOpen(previous, path, version, callback) 
 	{
 		if(path.length == 1)
 		{
@@ -71,6 +87,14 @@ function GitHubAccess (config)
 		}
 	}
 	
+	/**
+	 * Function to get the file code.
+	 * 
+	 * @param {Object} directory Directory where the file should exist.
+	 * @param {Object} file Filename.
+	 * @param {Object} version SHA of the version to get.
+	 * @param {Object} callbackF unction to be called when complete (parameter with content).
+	 */
 	function _getFile(directory, file, version, callback)
 	{
 		var file_info = directory.getFileByName(file);

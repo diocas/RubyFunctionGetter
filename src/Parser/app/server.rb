@@ -2,6 +2,8 @@ require 'sinatra'
 require_relative 'application'
 
 
+## Class session to store code
+
 class Session
   @@id = 0;
   
@@ -33,6 +35,8 @@ end
 
 sessionList = Array.new
 
+## Configure the request url.
+
 before do
   headers['Access-Control-Allow-Methods'] = 'POST'
   headers['Access-Control-Allow-Origin'] = 'http://localhost'   #To allow cross-site scripting 
@@ -40,6 +44,9 @@ before do
   headers['Access-Control-Allow-Headers'] = 'accept, authorization, origin'
   headers['Access-Control-Allow-Credentials'] = 'true'
 end
+
+## Create a new session with the passed code
+## Check if there is old code that should be deleted
 
 post '/' do
   begin
@@ -52,6 +59,9 @@ post '/' do
     
   end
 end
+
+## Return the passed method code
+## The file code comes from a stored session
 
 get '/code/' do
   begin
@@ -68,6 +78,9 @@ get '/code/' do
     
   end
 end
+
+
+## Check and clean old sessions
 
 def cleanOld(sessionList)
   sessionList.each do |session|

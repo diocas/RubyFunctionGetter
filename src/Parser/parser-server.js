@@ -1,6 +1,13 @@
-
+//URL to the parser server
 CodeParser.SERVICE_URL = "http://localhost:4567/";
 
+
+/**
+ * Class to comunicate with the parser located on a server.
+ * Receives code as text, sends it to the server and stores the session ID of the server.
+ * 
+ * @param {Object} codeGiven Code to parse
+ */
 function CodeParser(codeGiven)
 {
 	var code = codeGiven;
@@ -19,6 +26,12 @@ function CodeParser(codeGiven)
 			serverId = data;
 	});
 	
+	/**
+	 * Function to get a specific method's code.
+	 * Once the code is stored in the server, it asks to return a specific method.
+	 * 
+	 * @param methodToReturn Name of the method to return.
+	 */
 	this.getFunction = function (methodToReturn)
 	{
 		if (serverId == "") 
