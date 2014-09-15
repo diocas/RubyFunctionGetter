@@ -1,6 +1,6 @@
 
 /**
- * Class responible for accessing the github repository and getting its files.
+ * Class responsible for accessing the github repository and getting its files.
  * 
  * @param config Object with the repository configurations.
  */

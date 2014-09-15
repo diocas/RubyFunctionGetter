@@ -6,7 +6,7 @@
 2. Include all dependencies and pass the parameter "data-manual" to Prism library.
 3. Create an object of the type RubyFunctionGetter, passing a config object.
 4. Set all file calls inside HTML elements with "gettify" class.
-5. Call the gettify method from the RubyFunctionGetter objetct.
+5. Call the gettify method from the RubyFunctionGetter object.
 
 ## Config Syntax
 
